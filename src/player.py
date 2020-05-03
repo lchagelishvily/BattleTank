@@ -1,17 +1,20 @@
 
 import pygame
+from src.bullet import  Bullet
 
 
 class Player:
 
     def __init__(self, bt_game):
 
+        self.settings = bt_game.settings
         self.speed = bt_game.settings.player_speed
         self.animation_count = 0
         self.is_moving = False
-        self.direction = 'u'
+        self.direction = 'U'
         self.screen = bt_game.screen
         self.screen_rect = bt_game.screen.get_rect()
+        self.bullets = pygame.sprite.Group()
 
         self.move_up_sprites = [pygame.image.load('../images/player/ut1.png'),
                                 pygame.image.load('../images/player/ut2.png'),
@@ -64,6 +67,10 @@ class Player:
     def stop(self):
         self.is_moving = False
 
+    def fire(self):
+        new_bullet = Bullet(self)
+        self.bullets.add(new_bullet)
+
     def update(self):
         if self.is_moving:
             if self.direction == 'R':
@@ -78,6 +85,7 @@ class Player:
                 self.image = self.move_up_sprites[self._get_animation_idx() // 5]
                 if self.rect.top > 0:
                     self.rect.y -= self.speed
+
             if self.direction == 'D':
                 self.image = self.move_down_sprites[self._get_animation_idx() // 5]
                 if self.rect.bottom < self.screen_rect.bottom:
