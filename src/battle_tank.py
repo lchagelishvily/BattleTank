@@ -6,6 +6,8 @@ from src.player import Player
 
 class BattleTank:
 
+    clock = pygame.time.Clock()
+
     def __init__(self):
         pygame.init()
         self.settings = Settings()
@@ -16,6 +18,8 @@ class BattleTank:
 
     def run_game(self):
         while True:
+
+            self.clock.tick(30)
             self._check_events()
             self.player.update()
             self._update_screen()

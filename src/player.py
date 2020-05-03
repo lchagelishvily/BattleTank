@@ -6,6 +6,7 @@ class Player:
 
     def __init__(self, bt_game):
 
+        self.speed = bt_game.settings.player_speed
         self.animation_count = 0
         self.is_moving = False
         self.direction = 'u'
@@ -67,16 +68,20 @@ class Player:
         if self.is_moving:
             if self.direction == 'R':
                 self.image = self.move_right_sprites[self._get_animation_idx() // 5]
-                self.rect.x += 1
+                if self.rect.right < self.screen_rect.right:
+                    self.rect.x += self.speed
             if self.direction == 'L':
                 self.image = self.move_left_sprites[self._get_animation_idx() // 5]
-                self.rect.x -= 1
+                if self.rect.left > 0:
+                    self.rect.x -= self.speed
             if self.direction == 'U':
                 self.image = self.move_up_sprites[self._get_animation_idx() // 5]
-                self.rect.y -= 1
+                if self.rect.top > 0:
+                    self.rect.y -= self.speed
             if self.direction == 'D':
                 self.image = self.move_down_sprites[self._get_animation_idx() // 5]
-                self.rect.y += 1
+                if self.rect.bottom < self.screen_rect.bottom:
+                    self.rect.y += self.speed
 
     def _get_animation_idx(self):
         self.animation_count += 1
