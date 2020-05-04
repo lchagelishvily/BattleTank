@@ -65,6 +65,7 @@ class BattleTank:
             bullet.draw()
         pygame.display.flip()
 
+#Ну давай
 
 if __name__ == '__main__':
     bt = BattleTank()
