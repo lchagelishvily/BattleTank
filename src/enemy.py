@@ -1,20 +1,23 @@
-
 import pygame
-from src.bullet import  Bullet
+import random
+from pygame.sprite import Sprite
+
+from src.bullet import Bullet
 
 
-class Player:
+class Enemy(Sprite):
 
     def __init__(self, bt_game):
-
+        super().__init__()
         self.settings = bt_game.settings
-        self.speed = bt_game.settings.player_speed
+        self.speed = bt_game.settings.enemy_speed
         self.animation_count = 0
-        self.is_moving = False
-        self.direction = 'U'
+        self.is_moving = True
+        self.direction = 'D'
         self.screen = bt_game.screen
         self.screen_rect = bt_game.screen.get_rect()
         self.bullets = pygame.sprite.Group()
+        self.change_direction_delay = bt_game.settings.enemy_change_direction_delay
 
         self.move_up_sprites = [pygame.image.load('../images/player/ut1.png'),
                                 pygame.image.load('../images/player/ut2.png'),
@@ -44,9 +47,9 @@ class Player:
                                   pygame.image.load('../images/player/dt5.png'),
                                   pygame.image.load('../images/player/dt6.png')]
 
-        self.image = self.move_up_sprites[0]
+        self.image = self.move_down_sprites[0]
         self.rect = self.image.get_rect()
-        self.rect.midbottom = self.screen_rect.midbottom
+        self.rect.midtop = self.screen_rect.midtop
 
     def move_right(self):
         self.is_moving = True
@@ -75,6 +78,12 @@ class Player:
         return self._is_in_screen()
 
     def update(self):
+        if self.change_direction_delay == 0:
+            self.direction = random.choice(['R', 'L', 'U', 'D'])
+            self.change_direction_delay = self.settings.enemy_change_direction_delay
+        else:
+            self.change_direction_delay -= 1
+
         rect = self.rect.copy()
         if self.is_moving:
             if self.direction == 'R':
@@ -92,7 +101,7 @@ class Player:
                 self.rect.y += self.speed
         if not self._can_move():
             self.rect = rect
-            
+
     def _is_in_screen(self):
         return self.screen_rect.contains(self.rect)
 

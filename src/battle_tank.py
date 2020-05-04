@@ -3,6 +3,7 @@ import pygame
 from pygame import event
 from src.settings import Settings
 from src.player import Player
+from src.enemy import Enemy
 
 
 class BattleTank:
@@ -18,6 +19,8 @@ class BattleTank:
         self.bg = pygame.image.load('../images/bg.png').convert()
         pygame.display.set_caption("Battle Tank")
         self.player = Player(self)
+        self.enemies = pygame.sprite.Group()
+        self.enemies.add(Enemy(self))
 
     def run_game(self):
         while True:
@@ -26,6 +29,7 @@ class BattleTank:
             self._check_events()
             self.player.update()
             self.player.bullets.update()
+            self.enemies.update()
             self._update_screen()
 
     def _check_events(self):
@@ -38,7 +42,7 @@ class BattleTank:
                 self._check_keyup_events(key_event)
 
     def _check_keydown_events(self, key_event):
-        if key_event.key == pygame.K_q:
+        if key_event.key == pygame.K_ESCAPE:
             sys.exit()
         elif key_event.key == pygame.K_RIGHT:
             self.player.move_right()
@@ -63,7 +67,11 @@ class BattleTank:
         self.player.draw()
         for bullet in self.player.bullets.sprites():
             bullet.draw()
+        for enemy in self.enemies.sprites():
+            enemy.draw()
+
         pygame.display.flip()
+
 
 if __name__ == '__main__':
     bt = BattleTank()
