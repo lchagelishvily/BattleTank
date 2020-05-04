@@ -9,7 +9,7 @@ class Bullet(Sprite):
         super().__init__()
         self.screen = owner.screen
         self.settings = owner.settings
-        self.color = self.settings.bulet_color
+        self.color = self.settings.bullet_color
         self.direction = owner.direction
         self.owner = owner
         if self.direction == 'U':
