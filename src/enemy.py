@@ -16,12 +16,12 @@ class Enemy(Tank):
         self.bullets = pygame.sprite.Group()
         self.change_direction_delay = bt_game.settings.enemy_change_direction_delay
 
-        self.move_sprites = [pygame.image.load('../images/player/ut1.png'),
-                             pygame.image.load('../images/player/ut2.png'),
-                             pygame.image.load('../images/player/ut3.png'),
-                             pygame.image.load('../images/player/ut4.png'),
-                             pygame.image.load('../images/player/ut5.png'),
-                             pygame.image.load('../images/player/ut6.png')]
+        self.move_sprites = [pygame.image.load('../images/enemy/dt1.png'),
+                             pygame.image.load('../images/enemy/dt2.png'),
+                             pygame.image.load('../images/enemy/dt3.png'),
+                             pygame.image.load('../images/enemy/dt4.png'),
+                             pygame.image.load('../images/enemy/dt5.png'),
+                             pygame.image.load('../images/enemy/dt6.png')]
 
         self.rect.midtop = self.screen_rect.midtop
 
