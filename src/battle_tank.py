@@ -1,6 +1,5 @@
 import sys
 import pygame
-from pygame import event
 from src.settings import Settings
 from src.player import Player
 from src.enemy import Enemy
@@ -19,17 +18,21 @@ class BattleTank:
         self.bg = pygame.image.load('../images/bg.png').convert()
         pygame.display.set_caption("Battle Tank")
         self.player = Player(self)
+        enemy = Enemy(self)
         self.enemies = pygame.sprite.Group()
-        self.enemies.add(Enemy(self))
+        self.enemies.add(enemy)
+        self.all_tanks = pygame.sprite.Group()
+        self.all_tanks.add(self.player)
+        self.all_tanks.add(enemy)
 
     def run_game(self):
         while True:
 
             self.clock.tick(30)
             self._check_events()
-            self.player.update()
+            self.player.update(self)
             self.player.bullets.update()
-            self.enemies.update()
+            self.enemies.update(self)
             self._update_screen()
 
     def _check_events(self):
@@ -64,11 +67,9 @@ class BattleTank:
 
     def _update_screen(self):
         self.screen.blit(self.bg, (0, 0))
-        self.player.draw()
+        self.all_tanks.draw(self.screen)
         for bullet in self.player.bullets.sprites():
             bullet.draw()
-        for enemy in self.enemies.sprites():
-            enemy.draw()
 
         pygame.display.flip()
 
