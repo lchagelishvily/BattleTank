@@ -1,7 +1,7 @@
 
 import pygame
 from pygame.sprite import Sprite
-from src.bullet import  Bullet
+from src.bullet import Bullet
 
 
 class Tank(Sprite):
@@ -15,7 +15,6 @@ class Tank(Sprite):
         self.direction = 'U'
         self.screen = bt_game.screen
         self.screen_rect = bt_game.screen.get_rect()
-        self.bullets = pygame.sprite.Group()
 
         self.move_sprites = [pygame.image.load('../images/player/ut1.png'),
                              pygame.image.load('../images/player/ut2.png'),
@@ -26,7 +25,6 @@ class Tank(Sprite):
 
         self.image = self.move_sprites[0]
         self.rect = self.image.get_rect()
-        self.rect.midbottom = self.screen_rect.midbottom
 
     def move_right(self):
         self.is_moving = True
@@ -48,7 +46,7 @@ class Tank(Sprite):
         self.is_moving = False
 
     def fire(self):
-        pass
+        return Bullet(self)
 
     def _can_move(self, bt_game):
         return self._is_in_screen() and not self._is_collided(bt_game)

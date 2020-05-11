@@ -2,8 +2,6 @@ import pygame
 import random
 from src.tank import Tank
 
-from src.bullet import Bullet
-
 
 class Enemy(Tank):
 
@@ -13,8 +11,8 @@ class Enemy(Tank):
         self.speed = bt_game.settings.enemy_speed
         self.is_moving = True
         self.direction = 'D'
-        self.bullets = pygame.sprite.Group()
         self.change_direction_delay = bt_game.settings.enemy_change_direction_delay
+        self.fireing = bt_game.settings.enemy_fireing
 
         self.move_sprites = [pygame.image.load('../images/enemy/dt1.png'),
                              pygame.image.load('../images/enemy/dt2.png'),
@@ -31,6 +29,12 @@ class Enemy(Tank):
             self.change_direction_delay = self.settings.enemy_change_direction_delay
         else:
             self.change_direction_delay -= 1
+
+        if self.fireing == 0:
+            bt_game.bullets.add(self.fire())
+            self.fireing = self.settings.enemy_fireing
+        else:
+            self.fireing -=1
 
         rect = self.rect.copy()
         if self.is_moving:
