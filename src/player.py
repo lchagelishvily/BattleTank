@@ -1,14 +1,14 @@
 
 import pygame
-from src.bullet import  Bullet
+from src.bullet import Bullet
 from src.tank import Tank
+
 
 class Player(Tank):
 
     def __init__(self, bt_game):
         super().__init__(bt_game)
         self.speed = bt_game.settings.player_speed
-        self.bullets = pygame.sprite.Group()
 
         self.move_sprites = [pygame.image.load('../images/player/ut1.png').convert_alpha(),
                              pygame.image.load('../images/player/ut2.png').convert_alpha(),
@@ -16,12 +16,7 @@ class Player(Tank):
                              pygame.image.load('../images/player/ut4.png').convert_alpha(),
                              pygame.image.load('../images/player/ut5.png').convert_alpha(),
                              pygame.image.load('../images/player/ut6.png').convert_alpha()]
-
         self.rect.midbottom = self.screen_rect.midbottom
-
-    def fire(self):
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
 
     def update(self, bt_game):
         rect = self.rect.copy()
@@ -37,7 +32,6 @@ class Player(Tank):
             elif self.direction == 'U':
                 self.image = self.move_sprites[self._get_animation_idx() // 5]
                 self.rect.y -= self.speed
-
             elif self.direction == 'D':
                 self.image = self.move_sprites[self._get_animation_idx() // 5]
                 self.image = pygame.transform.rotate(self.image, 180)
@@ -47,7 +41,3 @@ class Player(Tank):
 
     def _is_collided(self, bt_game):
         return pygame.sprite.spritecollideany(self, bt_game.enemies)
-
-#   def draw(self):
-#      self.screen.blit(self.image, self.rect)
-

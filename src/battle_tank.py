@@ -17,6 +17,7 @@ class BattleTank:
         self.settings.screen_width = self.screen.get_rect().width
         self.bg = pygame.image.load('../images/bg.png').convert()
         pygame.display.set_caption("Battle Tank")
+        self.bullets = pygame.sprite.Group()
         self.player = Player(self)
         enemy = Enemy(self)
         self.enemies = pygame.sprite.Group()
@@ -31,18 +32,19 @@ class BattleTank:
             self.clock.tick(30)
             self._check_events()
             self.player.update(self)
-            self.player.bullets.update()
+            self.bullets.update()
             self.enemies.update(self)
             self._update_screen()
 
     def _check_events(self):
-        for key_event in pygame.event.get():
-            if key_event.type == pygame.QUIT:
-                sys.exit()
-            elif key_event.type == pygame.KEYDOWN:
-                self._check_keydown_events(key_event)
-            elif key_event.type == pygame.KEYUP:
-                self._check_keyup_events(key_event)
+        key_event = pygame.event.poll()
+
+        if key_event.type == pygame.QUIT:
+            sys.exit()
+        elif key_event.type == pygame.KEYDOWN:
+            self._check_keydown_events(key_event)
+        elif key_event.type == pygame.KEYUP:
+            self._check_keyup_events(key_event)
 
     def _check_keydown_events(self, key_event):
         if key_event.key == pygame.K_ESCAPE:
@@ -56,7 +58,7 @@ class BattleTank:
         elif key_event.key == pygame.K_DOWN:
             self.player.move_down()
         elif key_event.key == pygame.K_SPACE:
-            self.player.fire()
+            self.bullets.add(self.player.fire())
 
     def _check_keyup_events(self, key_event):
         if key_event.key == pygame.K_RIGHT \
@@ -68,8 +70,7 @@ class BattleTank:
     def _update_screen(self):
         self.screen.blit(self.bg, (0, 0))
         self.all_tanks.draw(self.screen)
-        for bullet in self.player.bullets.sprites():
-            bullet.draw()
+        self.bullets.draw(self.screen)
 
         pygame.display.flip()
 

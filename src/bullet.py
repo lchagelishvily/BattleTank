@@ -9,43 +9,41 @@ class Bullet(Sprite):
         super().__init__()
         self.screen = owner.screen
         self.settings = owner.settings
-        self.color = self.settings.bullet_color
+        self.image = pygame.image.load('../images/bullet.png').convert_alpha()
         self.direction = owner.direction
         self.owner = owner
+        self.screen_rect = owner.screen.get_rect()
+
         if self.direction == 'U':
-            self.rect = pygame.Rect(0, 0, self.settings.bullet_width, self.settings.bullet_height)
+            self.rect = self.image.get_rect()
             self.rect.midtop = owner.rect.midtop
         elif self.direction == 'D':
-            self.rect = pygame.Rect(0, 0, self.settings.bullet_width, self.settings.bullet_height)
+            self.image = pygame.transform.rotate(self.image, 180)
+            self.rect = self.image.get_rect()
             self.rect.midbottom = owner.rect.midbottom
         elif self.direction == 'L':
-            self.rect = pygame.Rect(0, 0, self.settings.bullet_height, self.settings.bullet_width)
+            self.image = pygame.transform.rotate(self.image, 90)
+            self.rect = self.image.get_rect()
             self.rect.midleft = owner.rect.midleft
         elif self.direction == 'R':
-            self.rect = pygame.Rect(0, 0, self.settings.bullet_height, self.settings.bullet_width)
+            self.image = pygame.transform.rotate(self.image, -90)
+            self.rect = self.image.get_rect()
             self.rect.midright = owner.rect.midright
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
 
+    def _is_in_screen(self):
+        return self.screen_rect.contains(self.rect)
+
     def update(self):
         if self.direction == 'U':
-            self.y -= self.settings.bullet_speed
+            self.rect.y -= self.settings.bullet_speed
         elif self.direction == 'D':
-            self.y += self.settings.bullet_speed
+            self.rect.y += self.settings.bullet_speed
         elif self.direction == 'L':
-            self.x -= self.settings.bullet_speed
+            self.rect.x -= self.settings.bullet_speed
         elif self.direction == 'R':
-            self.x += self.settings.bullet_speed
+            self.rect.x += self.settings.bullet_speed
 
-        self.rect.x = self.x
-        self.rect.y = self.y
-
-        if self.rect.top < 0\
-                or self.rect.bottom > self.owner.screen_rect.bottom\
-                or self.rect.left < 0\
-                or self.rect.right > self.owner.screen_rect.right:
-            self.owner.bullets.remove(self)
-
-
-    def draw(self):
-        pygame.draw.rect(self.screen, self.color, self.rect)
+        if not self._is_in_screen():
+            self.kill()

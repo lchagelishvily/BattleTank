@@ -8,7 +8,7 @@ class Settings():
         self.player_speed = 5
         self.enemy_speed = 5
         self.enemy_change_direction_delay = 90
-        self.bullet_speed = 4
+        self.bullet_speed = 8
         self.bullet_width = 3
         self.bullet_height = 15
-        self.bullet_color = (60, 60, 60)
+        self.enemy_fireing = 30
